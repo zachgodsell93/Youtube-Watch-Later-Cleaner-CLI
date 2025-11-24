@@ -25,6 +25,7 @@ Perfect for power users who want to batch-process their playlists, automate clea
 ## ✨ Features
 
 ### Core Functionality
+
 - **🔄 Batch Processing**: Clean your entire Watch Later playlist in one operation
 - **🎚️ Flexible Thresholds**: Remove videos based on watch percentage (any, 25%, 50%, 75%)
 - **🔍 Dry Run Mode**: Preview what would be removed before making changes
@@ -33,6 +34,7 @@ Perfect for power users who want to batch-process their playlists, automate clea
 - **📊 Detailed Reporting**: See exactly which videos will be removed and why
 
 ### Developer-Friendly
+
 - **🐍 Pure Python**: Clean, well-documented code using modern Python 3.7+
 - **📦 Minimal Dependencies**: Uses official Google API client libraries
 - **🛠️ Extensible**: Easy to integrate into automation workflows
@@ -81,6 +83,7 @@ pip install -r requirements.txt
 ```
 
 **Dependencies installed:**
+
 - `google-api-python-client` - YouTube Data API client
 - `google-auth-oauthlib` - OAuth 2.0 authentication
 - `google-auth-httplib2` - HTTP library for Google APIs
@@ -132,6 +135,7 @@ python youtube_cleaner.py --threshold 50 --dry-run
 ```
 
 **Output example:**
+
 ```
 Authenticating with YouTube...
 ✓ Authentication successful
@@ -162,6 +166,7 @@ python youtube_cleaner.py --threshold 50 --execute
 ```
 
 **Output example:**
+
 ```
 Authenticating with YouTube...
 ✓ Authentication successful
@@ -185,12 +190,12 @@ Time saved: 47 minutes
 
 ### Threshold Options
 
-| Option | Description | Use Case |
-|--------|-------------|----------|
-| `any` | Remove videos with any watch time (> 0%) | Aggressive cleaning |
-| `25` | Remove videos watched at least 25% | Moderate cleaning |
-| `50` | Remove videos watched at least 50% | Balanced approach (default) |
-| `75` | Remove videos watched at least 75% | Conservative cleaning |
+| Option | Description                              | Use Case                    |
+| ------ | ---------------------------------------- | --------------------------- |
+| `any`  | Remove videos with any watch time (> 0%) | Aggressive cleaning         |
+| `25`   | Remove videos watched at least 25%       | Moderate cleaning           |
+| `50`   | Remove videos watched at least 50%       | Balanced approach (default) |
+| `75`   | Remove videos watched at least 75%       | Conservative cleaning       |
 
 ### Command Line Arguments
 
@@ -198,33 +203,37 @@ Time saved: 47 minutes
 python youtube_cleaner.py [OPTIONS]
 ```
 
-| Argument | Type | Default | Description |
-|----------|------|---------|-------------|
-| `--threshold` | `{any,25,50,75}` | `50` | Watch time percentage threshold |
-| `--credentials` | `PATH` | `client_secrets.json` | Path to OAuth credentials file |
-| `--dry-run` | flag | - | Preview mode - don't remove videos |
-| `--execute` | flag | - | Actually remove videos |
-| `--verbose` | flag | - | Show detailed logging |
-| `--help` | flag | - | Display help message |
+| Argument        | Type             | Default               | Description                        |
+| --------------- | ---------------- | --------------------- | ---------------------------------- |
+| `--threshold`   | `{any,25,50,75}` | `50`                  | Watch time percentage threshold    |
+| `--credentials` | `PATH`           | `client_secrets.json` | Path to OAuth credentials file     |
+| `--dry-run`     | flag             | -                     | Preview mode - don't remove videos |
+| `--execute`     | flag             | -                     | Actually remove videos             |
+| `--verbose`     | flag             | -                     | Show detailed logging              |
+| `--help`        | flag             | -                     | Display help message               |
 
 ### Usage Examples
 
 #### Preview aggressive cleaning (any watch time)
+
 ```bash
 python youtube_cleaner.py --threshold any --dry-run
 ```
 
 #### Remove videos watched 75% or more
+
 ```bash
 python youtube_cleaner.py --threshold 75 --execute
 ```
 
 #### Use custom credentials file
+
 ```bash
 python youtube_cleaner.py --credentials ~/my_creds.json --threshold 50 --execute
 ```
 
 #### Verbose output for debugging
+
 ```bash
 python youtube_cleaner.py --threshold 50 --dry-run --verbose
 ```
@@ -309,22 +318,26 @@ crontab -e
 ### Workflow
 
 1. **Authentication**
+
    - Check for existing `token.pickle`
    - If missing or expired, initiate OAuth 2.0 flow
    - Open browser for user authorization
    - Save tokens for future use
 
 2. **Playlist Retrieval**
+
    - Fetch Watch Later playlist ID
    - Retrieve all videos in playlist
    - Extract video IDs and metadata
 
 3. **Watch History Analysis**
+
    - Query watch history for each video
    - Calculate watch percentage
    - Filter based on threshold
 
 4. **Removal (Execute Mode)**
+
    - Remove playlist items via API
    - Track success/failure for each video
    - Display summary statistics
@@ -342,11 +355,11 @@ crontab -e
 
 All data is stored **locally on your machine**:
 
-| File | Contents | Location |
-|------|----------|----------|
-| `client_secrets.json` | OAuth credentials | Project directory |
-| `token.pickle` | Access & refresh tokens | Project directory |
-| `config.py` | User preferences (optional) | Project directory |
+| File                  | Contents                    | Location          |
+| --------------------- | --------------------------- | ----------------- |
+| `client_secrets.json` | OAuth credentials           | Project directory |
+| `token.pickle`        | Access & refresh tokens     | Project directory |
+| `config.py`           | User preferences (optional) | Project directory |
 
 **Important**: Never commit `client_secrets.json` or `token.pickle` to version control!
 
@@ -357,6 +370,7 @@ The script requests these YouTube API scopes:
 - `https://www.googleapis.com/auth/youtube` - Full access to YouTube account
 
 This allows the script to:
+
 - Read your Watch Later playlist
 - Access watch history
 - Remove videos from playlists
@@ -365,15 +379,16 @@ This allows the script to:
 
 YouTube Data API v3 has daily quota limits:
 
-| Operation | Cost (Units) | Example |
-|-----------|--------------|---------|
-| Playlist items list | 1 | Fetching Watch Later |
-| Playlist item delete | 50 | Removing one video |
-| Video details | 1 | Getting video metadata |
+| Operation            | Cost (Units) | Example                |
+| -------------------- | ------------ | ---------------------- |
+| Playlist items list  | 1            | Fetching Watch Later   |
+| Playlist item delete | 50           | Removing one video     |
+| Video details        | 1            | Getting video metadata |
 
 **Default daily quota**: 10,000 units
 
 **Typical usage**:
+
 - Small playlist (< 50 videos): ~100 units
 - Medium playlist (50-200 videos): ~500 units
 - Large playlist (> 200 videos): May require multiple days
@@ -387,6 +402,7 @@ YouTube Data API v3 has daily quota limits:
 **Problem**: "The authentication flow has failed"
 
 **Solutions**:
+
 1. Delete `token.pickle` and re-authenticate
 2. Verify `client_secrets.json` is valid
 3. Check OAuth consent screen is configured in Google Cloud Console
@@ -396,18 +412,19 @@ YouTube Data API v3 has daily quota limits:
 
 Common errors and solutions:
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `403 Forbidden` | API not enabled | Enable YouTube Data API v3 in Google Cloud Console |
-| `401 Unauthorized` | Invalid/expired token | Delete `token.pickle`, re-run script |
-| `429 Too Many Requests` | Quota exceeded | Wait 24 hours for quota reset |
-| `404 Not Found` | Playlist not found | Verify you have a Watch Later playlist |
+| Error                   | Cause                 | Solution                                           |
+| ----------------------- | --------------------- | -------------------------------------------------- |
+| `403 Forbidden`         | API not enabled       | Enable YouTube Data API v3 in Google Cloud Console |
+| `401 Unauthorized`      | Invalid/expired token | Delete `token.pickle`, re-run script               |
+| `429 Too Many Requests` | Quota exceeded        | Wait 24 hours for quota reset                      |
+| `404 Not Found`         | Playlist not found    | Verify you have a Watch Later playlist             |
 
 ### No Videos Found
 
 **Problem**: Script says "0 videos in Watch Later" but you have videos
 
 **Solutions**:
+
 1. Verify you're authenticated with the correct Google account
 2. Check your Watch Later playlist: https://www.youtube.com/playlist?list=WL
 3. Ensure playlist is not empty or private
@@ -419,11 +436,13 @@ Common errors and solutions:
 **Important Note**: The YouTube Data API v3 has **limited support** for retrieving watch history and watch percentages.
 
 **Current Limitations**:
+
 - Watch history API is restricted
 - Watch percentage data is not directly accessible
 - Current implementation provides framework only
 
 **Workarounds**:
+
 1. **YouTube Analytics API** - Additional setup required, has its own limitations
 2. **Google Takeout** - Export watch history, parse locally
 3. **Custom tracking** - Implement separate tracking mechanism
@@ -436,6 +455,7 @@ This is a **known YouTube API limitation**, not a bug in this script.
 **Problem**: `ModuleNotFoundError: No module named 'google'`
 
 **Solution**:
+
 ```bash
 # Ensure virtual environment is activated
 source env/bin/activate  # macOS/Linux
@@ -469,15 +489,19 @@ Youtube-Watch-Later-Cleaner-CLI/
 ### Manual Testing
 
 1. **Test authentication**:
+
    ```bash
    python youtube_cleaner.py --dry-run
    ```
+
    Verify browser opens and authentication succeeds.
 
 2. **Test dry run mode**:
+
    ```bash
    python youtube_cleaner.py --threshold 25 --dry-run
    ```
+
    Check that no videos are actually removed.
 
 3. **Test execute mode** (with caution):
@@ -570,11 +594,13 @@ Contributions are welcome! Here's how you can help:
 ## 📚 Resources
 
 ### Official Documentation
+
 - [YouTube Data API v3](https://developers.google.com/youtube/v3)
 - [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)
 - [Python Google API Client](https://github.com/googleapis/google-api-python-client)
 
 ### Related Tools
+
 - [YouTube Data API Reference](https://developers.google.com/youtube/v3/docs)
 - [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/)
 - [Google Cloud Console](https://console.cloud.google.com/)
@@ -624,8 +650,6 @@ This tool uses the YouTube Data API v3 and requires compliance with [YouTube's T
 ---
 
 <div align="center">
-
-**Built for developers who prefer the command line**
 
 [⬆ Back to Top](#youtube-watch-later-cleaner)
 
